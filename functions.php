@@ -1,6 +1,6 @@
 <?php 
 
-function MontarTabuleiro($y){
+function montarTabuleiro($y){
 	echo '<table class="table table-bordered table-hover table-stripped " style="text-align:center; font-size: 30px">';
 	$teste = 0;
 	
@@ -49,6 +49,18 @@ function MontarTabuleiro($y){
     <div class="row">
     </div>
     FRASE;
+}
+
+function fazerMovimento(){
+
+}
+
+function validarMovimento(){
+
+}
+
+function botMovimentar(){
+	
 }
 
 ?>
