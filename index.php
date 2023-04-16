@@ -71,13 +71,20 @@ session_start();
 
 			//Funcionamento: Se os campos 'origemLinha', 'origemColuna', 'destinoLinha' e
 			//'destinoColuna' tiverem sidos iniciados(preenchidos) executa esse if.
-			if(isset($_POST['origemLinha']) && isset($_POST['origemColuna']) && isset($_POST['destinoLinha']) && isset($_POST['destinoColuna'])){
+			if(isset($_POST['origemLinha']) &&
+			isset($_POST['origemColuna'])  &&
+			isset($_POST['destinoLinha'])  &&
+			isset($_POST['destinoColuna']) ){
 				$origemLinha = $_POST['origemLinha'];
 				$origemColuna = $_POST['origemColuna'];
 				$destinoLinha = $_POST['destinoLinha'];
 				$destinoColuna = $_POST['destinoColuna'];
 
-				$y = $_SESSION["tabuleiro"];
+				if(empty($origemLinha) || empty($origemColuna) || empty($destinoLinha) || empty($destinoColuna)){
+					echo '<div class="alert alert-danger">Você esqueceu de preencher algum campo. Por favor, preencha todos os campos!</div>';
+					// Ou você pode redirecionar o usuário para outra página, exibir uma mensagem de erro em um alerta, etc.
+				}else{
+					$y = $_SESSION["tabuleiro"];
 				
 				//Funcionamento: se as posições escolhidas forem válidas excuta esse if.
 				if(validarMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $destinoColuna)){
@@ -100,6 +107,32 @@ session_start();
 					$y = $_SESSION["tabuleiro"];
 
 					$_SESSION["tabuleiro"] = botMovimentar($y);
+
+					// Verificar se o jogador X venceu
+					if (verificarVencedor($y, '0')) {
+						echo <<< FRASE
+						<h1>O jogador X ganhou!</h1>
+						<form method='POST'>
+						<input type='hidden' name='action' value='ResetGame'>
+						<input class='btn btn-light' type='submit' value='Reiniciar jogo'>
+						</form>
+						</div>
+						FRASE;
+						exit;
+					}
+
+					// Verificar se o jogador 0 venceu
+					if (verificarVencedor($y, 'X')) {
+						echo <<< FRASE
+						<h1>O bot ganhou!</h1>
+						<form method='POST'>
+						<input type='hidden' name='action' value='ResetGame'>
+						<input class='btn btn-light' type='submit' value='Reiniciar jogo'>
+						</form>
+						</div>
+						FRASE;
+						exit;
+					}
 					
 					//Objetivo: Exibir alerta de quem é o turno atual
 					//Funcionamento: se o turno atual for do jogador, exibe na
@@ -133,6 +166,9 @@ session_start();
 						$_SESSION['tabuleiro'][0][$j] = 'D';
 					}
 				}
+				}
+
+				
 
 			}
 			
