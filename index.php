@@ -74,7 +74,7 @@ session_start();
 			if(isset($_POST['origemLinha']) &&
 			isset($_POST['origemColuna'])  &&
 			isset($_POST['destinoLinha'])  &&
-			isset($_POST['destinoColuna']) ){
+			isset($_POST['destinoColuna'])){
 				$origemLinha = $_POST['origemLinha'];
 				$origemColuna = $_POST['origemColuna'];
 				$destinoLinha = $_POST['destinoLinha'];
@@ -82,8 +82,15 @@ session_start();
 
 				if(empty($origemLinha) || empty($origemColuna) || empty($destinoLinha) || empty($destinoColuna)){
 					echo '<div class="alert alert-danger">Você esqueceu de preencher algum campo. Por favor, preencha todos os campos!</div>';
-					// Ou você pode redirecionar o usuário para outra página, exibir uma mensagem de erro em um alerta, etc.
-				}else{
+				}
+				else if ($origemLinha < 1 || $origemLinha > 8 ||
+				        $origemColuna < 1 || $origemColuna > 8 ||
+            			$destinoLinha < 1 || $destinoLinha > 8 ||
+            			$destinoColuna < 1 || $destinoColuna > 8) {
+							echo '<div class="alert alert-danger">Valores inválidos. Por favor, insira valores entre 1 e 8 para as linhas e colunas!</div>';
+            // Ou você pode redirecionar o usuário para outra página, exibir uma mensagem de erro em um alerta, etc.
+        		}
+				else{
 					$y = $_SESSION["tabuleiro"];
 				
 				//Funcionamento: se as posições escolhidas forem válidas excuta esse if.

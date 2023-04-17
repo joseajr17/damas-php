@@ -77,10 +77,6 @@ function fazerMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $destino
 
 }
 
-function validarMovimento(){
-
-}
-
 function botMovimentar($y){
 	
 	//esse primeiro for procura se há uma peça do jogador a
@@ -92,6 +88,7 @@ function botMovimentar($y){
 					if($y[$i + 1][$j + 1] == 'X' && $y[$i + 2][$j +2] == '-'){
 						return fazerMovimento($y, $i, $j, $i+2, $j+2);
 					}
+			
 				}
 				else if($j - 2>0){
 					if($y[$i + 1][$j - 1] == 'X' && $y[$i + 2][$j -2] == '-'){
@@ -122,6 +119,176 @@ function botMovimentar($y){
 		}
 	}
 	
+}
+
+function validarMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $destinoColuna){
+
+		if (
+
+		//movimento simples: direita e frente
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha][$destinoColuna] == '-'
+		&& $destinoLinha == $origemLinha - 1 
+		&& $destinoColuna == $origemColuna + 1  
+		
+		|| 
+		
+		//movimento simples: esquerda e frente 
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha][$destinoColuna] == '-'
+		&& $destinoLinha == $origemLinha - 1
+		&& $destinoColuna == $origemColuna - 1)
+		
+	{
+		return true;
+	}
+
+	//movimento de captura: direita e frente
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha+1][$destinoColuna-1] == '0'
+		&& $destinoLinha == $origemLinha-2
+		&& $destinoColuna == $origemColuna + 2){
+
+		$y[$destinoLinha+1][$destinoColuna-1] = '-';
+		return true;
+
+	}
+
+	//movimento de captura: esquerda e frente
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha+1][$destinoColuna+1] == '0'
+		&& $destinoLinha == $origemLinha-2
+		&& $destinoColuna == $origemColuna - 2
+		){
+
+		$y[$destinoLinha+1][$destinoColuna+1] = '-';
+		return true;
+
+	}
+
+	//movimento de captura: direita e trás
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha-1][$destinoColuna-1] == '0'
+		&& $destinoLinha == $origemLinha+2
+		&& $destinoColuna == $origemColuna+2
+		){
+
+		$y[$destinoLinha-1][$destinoColuna-1] = '-';
+		return true;
+
+	}
+
+	//movimento de captura: esquerda e trás
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha-1][$destinoColuna+1] == '0'
+		&& $destinoLinha == $origemLinha+2
+		&& $destinoColuna == $origemColuna - 2
+		){
+
+		$y[$destinoLinha-1][$destinoColuna+1] = '-';
+		return true;
+
+	}
+	////////////////----BOT----///////////////////////
+	
+	//movimento de captura: direita e frente
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha-1][$destinoColuna+1] == 'X'
+		&& $destinoLinha == $origemLinha + 2
+		&& $destinoColuna == $origemColuna - 2
+		){
+
+		$y[$destinoLinha-1][$destinoColuna+1] = '-';
+		return true;
+
+	}
+
+	//movimento de captura: esquerda e frente
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha-1][$destinoColuna-1] == 'X'
+		&& $destinoLinha == $origemLinha + 2
+		&& $destinoColuna == $origemColuna + 2
+		){
+
+
+		$y[$destinoLinha-1][$destinoColuna-1] = '-';
+		return true;
+
+	}
+	
+	//movimento de captura: direita e trás
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha+1][$destinoColuna-1] == 'X'
+		&& $destinoLinha == $origemLinha - 2
+		&& $destinoColuna == $origemColuna + 2
+		){
+
+		$y[$destinoLinha+1][$destinoColuna-1] = '-';
+		return true;
+
+	}
+
+	//movimento de captura: esquerda e trás
+	else if(
+		$y[$origemLinha][$origemColuna] == $_SESSION['turn']
+		&& $y[$destinoLinha+1][$destinoColuna+1] == 'X'
+		&& $destinoLinha == $origemLinha - 2
+		&& $destinoColuna == $origemColuna - 2
+		){
+
+		$y[$destinoLinha+1][$destinoColuna+1] = '-';
+		return true;
+
+	}
+
+	/////
+
+	//comentei esse echo pq acho que serve pra nada
+	//echo($y[$origemLinha][$origemColuna]);
+
+	//if para validar o movimento das damas
+	if($y[$origemLinha][$origemColuna] == 'D' || $y[$origemLinha][$origemColuna] == 'C'){
+		if (abs($origemLinha - $destinoLinha) - abs($origemColuna - $destinoColuna) == 0){ 
+			if($_SESSION['turn'] == 'X'){
+				if($y[$origemLinha][$origemColuna] == 'C'){
+					return true;
+				}
+			}
+			else if($_SESSION['turn'] == '0'){
+				if($y[$origemLinha][$origemColuna] == 'D'){
+					return true;
+				}
+			}
+		}
+	}
+
+	// if($origemLinha == "" || $origemLinha = null || !isset($origemLinha)){
+	// 		return false;
+	// }
+	else
+	{
+		return false;
+	}
+	
+}
+
+function verificarVencedor($tabuleiro, $jogador)
+{
+    foreach ($tabuleiro as $linha) {
+        foreach ($linha as $peca) {
+            if ($peca == $jogador) {
+                return false; // O jogador ainda possui peças, o jogo não tem vencedor
+            }
+        }
+    }
+    return true; // O jogador não possui mais peças, o jogo tem um vencedor
 }
 
 ?>
