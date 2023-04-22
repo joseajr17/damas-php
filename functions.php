@@ -78,6 +78,43 @@ function fazerMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $destino
 }
 
 function botMovimentar($y){
+
+	// Verifica se há captura obrigatória à esquerda
+for ($i = 0; $i < 8; $i++){
+    for ($j = 0; $j < 8; $j++){
+        if ($y[$i][$j] == '0'){
+            if ($j + 2 < 8 && $i + 2 < 8){
+                if ($y[$i+1][$j+1] == 'X' && $y[$i+2][$j+2] == '-'){
+                    return fazerMovimento($y, $i, $j, $i+2, $j+2);
+                }
+            }
+            if ($j - 2 >= 0 && $i + 2 < 8){
+                if ($y[$i+1][$j-1] == 'X' && $y[$i+2][$j-2] == '-'){
+                    return fazerMovimento($y, $i, $j, $i+2, $j-2);
+                }
+            }
+        }
+    }
+}
+
+// Verifica se há captura obrigatória à direita
+for ($i = 0; $i < 8; $i++){
+    for ($j = 0; $j < 8; $j++){
+        if ($y[$i][$j] == '0'){
+            if ($j + 2 < 8 && $i - 2 >= 0){
+                if ($y[$i-1][$j+1] == 'X' && $y[$i-2][$j+2] == '-'){
+                    return fazerMovimento($y, $i, $j, $i-2, $j+2);
+                }
+            }
+            if ($j - 2 >= 0 && $i - 2 >= 0){
+                if ($y[$i-1][$j-1] == 'X' && $y[$i-2][$j-2] == '-'){
+                    return fazerMovimento($y, $i, $j, $i-2, $j-2);
+                }
+            }
+        }
+    }
+}
+
 	
 	//esse primeiro for procura se há uma peça do jogador a
 	//frente da peça do bot, para que o bot possa capturar
@@ -120,6 +157,7 @@ function botMovimentar($y){
 	}
 	
 }
+
 
 function validarMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $destinoColuna){
 
@@ -248,11 +286,6 @@ function validarMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $desti
 
 	}
 
-	/////
-
-	//comentei esse echo pq acho que serve pra nada
-	//echo($y[$origemLinha][$origemColuna]);
-
 	//if para validar o movimento das damas
 	if($y[$origemLinha][$origemColuna] == 'D' || $y[$origemLinha][$origemColuna] == 'C'){
 		if (abs($origemLinha - $destinoLinha) - abs($origemColuna - $destinoColuna) == 0){ 
@@ -268,10 +301,6 @@ function validarMovimento($y, $origemLinha, $origemColuna, $destinoLinha, $desti
 			}
 		}
 	}
-
-	// if($origemLinha == "" || $origemLinha = null || !isset($origemLinha)){
-	// 		return false;
-	// }
 	else
 	{
 		return false;
